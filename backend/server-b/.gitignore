@@ -1,0 +1,25 @@
+# Node.js dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# Environment variables
+.env
+
+# Dependency directory
+/vendor
+
+# Docker artifacts
+# .dockerignore
+# .docker/
+
+# Editor specific files
+.vscode/
+
+# OS-specific files
+npm-debug.log*
