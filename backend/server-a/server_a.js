@@ -2,23 +2,24 @@ const express = require("express");
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const OrderRoute = require('./routes/OrderRoute');
-const port = 3001;
+const OrderRoute = require('./routes/orderRoute');
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.json({ limit: '100mb' })); // Parsing JSON request bodies with size limit
 
-mongoose.connect('mongodb://localhost:27017/SandwichProject', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => {
-    app.listen(port, () => {
-      console.log(`Server A listening at http://localhost:${port}`);
-    });
-}).catch(error => {
-    console.log(error);
+// Connect to MongoDB
+mongoose.connect('mongodb://mongo:27017/sandwichProject', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
+const db = mongoose.connection; // Storing the database connection
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.use('/api/v1/orderRoute', OrderRoute);
+app.use('/api/v1', OrderRoute);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

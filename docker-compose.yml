@@ -28,6 +28,12 @@ services:
       context:  ./backend/server-a
     # volumes:
     #   - ./server-a:/app/server-a
+    # environment:
+    #   - PORT=3001
+    #   - URL=http://localhost
+    #   - MONGO_URL=mongodb://mongo:27017
+    #   - DB_NAME=sandwichProject
+    #   - API_VERSION=v1
     ports:
       # - "12345:8080"
       - "3001:3001"
@@ -68,6 +74,13 @@ services:
         # - "12345:8080"
         - "3002:3002"
 
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
   # Your group might want to use a database to store some data
   # You can use any database you wish, PostgreSQL, MySQL and
   # MongoDB have rather good Docker documentation and examples.
@@ -88,3 +101,6 @@ services:
 # Personally I like to look at the database's image's Dockerfile
 # in the Docker Hub to see what directory it uses to store data.
 # volumes:
+
+volumes:
+  mongo_data:
