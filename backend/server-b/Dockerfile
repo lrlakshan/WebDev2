@@ -1,9 +1,20 @@
-# This is where you define the image for
-# the server B which processes the orders.
+# Use an official Node runtime as the base image
+FROM node:lts
 
-# You should then use Noje image from Docker Hub as the basis,
-# and then follow the instructions linked to in assignment document.
-# You should be able to produce a working installation by just
-# following the instructions.
+# Set the working directory in the container to /app
+WORKDIR /app
 
-#FROM node:version...
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install npm packages
+RUN npm install
+
+# Copy the current directory contents into the container at /app
+COPY . .
+
+# Make port 3002 available to the world outside this container
+EXPOSE 3002
+
+# Command to run the application
+CMD ["node", "server_b.js"]

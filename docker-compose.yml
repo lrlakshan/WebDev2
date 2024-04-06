@@ -14,7 +14,7 @@ services:
   # server-a is based on the Docker image the groups produce and build themselves.
   server-a:
     # Change the image information to match your server A image
-    image: # $USERNAME/$IMAGENAME:$TAG, something like group000/node-swagger:3a
+    image: groupbgl/node-server-a
     # 'depends_on' and 'command' are  to be used when used
     # with RabbitMQ service in this file. 'depends_on' must be set
     # to RabbitMQ service's name from this file, and 'command'
@@ -26,10 +26,13 @@ services:
     build:
       dockerfile: Dockerfile
       context:  ./backend/server-a
+    # volumes:
+    #   - ./server-a:/app/server-a
     ports:
-      - "12345:8080"
-    networks:
-      - backend
+      # - "12345:8080"
+      - "3001:3001"
+    # networks:
+    #   - backend
 
   # You can base this service on a rabbitmq Docker Hub image.
   # You need to expose the RabbitMQ port to other containers
@@ -49,8 +52,8 @@ services:
   # A set of needed Docker instructions like 'image:' are shown
   # below, groups should set their values. Groups are free to
   # CRUD this set of instructions as they see fit.
-  # server-b:
-      # image:
+  server-b:
+      image: groupbgl/node-server-b
       # depends_on:
       # command: ["./utils/wait-for-it.sh", "rapid-runner-rabbit:5672", "--",  "npm", "start"]
       # build:
@@ -58,6 +61,12 @@ services:
       #   context:
       # expose:
       # networks:
+      build:
+        dockerfile: Dockerfile
+        context:  ./backend/server-b
+      ports:
+        # - "12345:8080"
+        - "3002:3002"
 
   # Your group might want to use a database to store some data
   # You can use any database you wish, PostgreSQL, MySQL and
@@ -70,8 +79,8 @@ services:
 # Here we create a named network, that all the backend components
 # must be added to for them to be able to communicate through
 # exposed ports.
-networks:
-  backend:
+# networks:
+#   backend:
 
 # If you use databases for storing information, you can define
 # their volumes here.
