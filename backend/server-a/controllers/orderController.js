@@ -1,5 +1,6 @@
 const OrderSchema = require("../models/order");
 const { addTask } = require("../rabbit-utils/sendTask");
+const { rabbitHost, queue1 } = require("../config");
 
 /**
  * @swagger
@@ -93,7 +94,7 @@ const addNewOrder = async (req, res, next) => {
     });
 
     const savedOrder = await order.save();
-    addTask('rapid-runner-rabbit', 'received-orders', savedOrder); // Send the order to the RabbitMQ work queue
+    addTask(rabbitHost, queue1, savedOrder); // Send the order to the RabbitMQ work queue
     res.status(201).json(savedOrder);
   } catch (err) {
     console.error(err);
