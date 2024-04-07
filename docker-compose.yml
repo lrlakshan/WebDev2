@@ -39,6 +39,8 @@ services:
       - "3001:3001"
     # networks:
     #   - backend
+    networks:
+      - rabbit_network
 
   # You can base this service on a rabbitmq Docker Hub image.
   # You need to expose the RabbitMQ port to other containers
@@ -82,6 +84,8 @@ services:
     ports:
       # - "12345:8080"
       - "3002:3002"
+    networks:
+      - rabbit_network
 
   mongo:
     image: mongo
@@ -90,6 +94,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - rabbit_network
   # Your group might want to use a database to store some data
   # You can use any database you wish, PostgreSQL, MySQL and
   # MongoDB have rather good Docker documentation and examples.
