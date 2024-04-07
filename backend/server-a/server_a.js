@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const OrderRoute = require('./routes/orderRoute');
+const { specs, swaggerUi } = require('./swagger/swagger');
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -17,6 +18,9 @@ mongoose.connect('mongodb://mongo:27017/sandwichProject', {
 });
 const db = mongoose.connection; // Storing the database connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+// Serve Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/api/v1', OrderRoute);
 
