@@ -13,7 +13,7 @@ const orderSchema = new Schema({
   status: {
     type: String,
     enum: OrderStatusEnum, // Limiting the status to predefined values in OrderStatusEnum
-    default: 'inQueue' // Default status is 'inQueue' if not provided
+    default: 'ordered' // Default status is 'ordered' if not provided
   }
 });
 
