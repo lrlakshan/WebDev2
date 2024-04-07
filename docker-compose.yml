@@ -20,9 +20,9 @@ services:
     # to RabbitMQ service's name from this file, and 'command'
     # can be modified to be anything, but what is given should
     # work. Just uncomment them
-    # depends_on:
-    #   -  rapid-runner-rabbit
-    # command: ["./utils/wait-for-it.sh", "rapid-runner-rabbit:5672", "--",  "npm", "start"]
+    depends_on:
+      -  rapid-runner-rabbit
+    command: ["./utils/wait-for-it.sh", "rapid-runner-rabbit:5672", "--",  "npm", "start"]
     build:
       dockerfile: Dockerfile
       context:  ./backend/server-a
@@ -39,6 +39,8 @@ services:
       - "3001:3001"
     # networks:
     #   - backend
+    networks:
+      - rabbit_network
 
   # You can base this service on a rabbitmq Docker Hub image.
   # You need to expose the RabbitMQ port to other containers
@@ -46,11 +48,19 @@ services:
   # A set of needed Docker instructions like 'image:' are shown
   # below, groups should set their values. Groups are free to
   # CRUD the set of instructions as they see fit.
-  # rapid-runner-rabbit:
-  #   image:
-  #   ports:
-  #   expose:
-  #   networks:
+  rapid-runner-rabbit:
+    image: rabbitmq:3.8-management # Use the management image
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management port
+    expose:
+      - "5672"
+      - "15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - rabbit_network
 
   # much of the server-b service entry can be copied from server-a
   # service above. server-b directory Dockerfile has more
@@ -59,20 +69,23 @@ services:
   # below, groups should set their values. Groups are free to
   # CRUD this set of instructions as they see fit.
   server-b:
-      image: groupbgl/node-server-b
-      # depends_on:
-      # command: ["./utils/wait-for-it.sh", "rapid-runner-rabbit:5672", "--",  "npm", "start"]
-      # build:
-      #   dockerfile:
-      #   context:
-      # expose:
-      # networks:
-      build:
-        dockerfile: Dockerfile
-        context:  ./backend/server-b
-      ports:
-        # - "12345:8080"
-        - "3002:3002"
+    image: groupbgl/node-server-b
+    depends_on:
+      -  rapid-runner-rabbit
+    command: ["./utils/wait-for-it.sh", "rapid-runner-rabbit:5672", "--",  "npm", "start"]
+    # build:
+    #   dockerfile:
+    #   context:
+    # expose:
+    # networks:
+    build:
+      dockerfile: Dockerfile
+      context:  ./backend/server-b
+    ports:
+      # - "12345:8080"
+      - "3002:3002"
+    networks:
+      - rabbit_network
 
   mongo:
     image: mongo
@@ -81,6 +94,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - rabbit_network
   # Your group might want to use a database to store some data
   # You can use any database you wish, PostgreSQL, MySQL and
   # MongoDB have rather good Docker documentation and examples.
@@ -104,3 +119,7 @@ services:
 
 volumes:
   mongo_data:
+
+networks:
+  rabbit_network:
+    driver: bridge
