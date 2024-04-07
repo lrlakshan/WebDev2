@@ -104,6 +104,15 @@ services:
   # database-service would go here.
   #database:
 
+  # Frontend
+  react-app:
+    container_name: sandwich-app
+    build:
+      context: ./frontend/frontend-app
+      dockerfile: Dockerfile 
+    ports:
+     - "3000:3000"
+
 # Here we create a named network, that all the backend components
 # must be added to for them to be able to communicate through
 # exposed ports.

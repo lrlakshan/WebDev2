@@ -1,0 +1,33 @@
+# Ignore system-specific files
+.dockerignore
+Dockerfile
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+
+# Ignore development and test artifacts
+node_modules/
+*.log
+*.tmp
+
+# Ignore temporary files
+*.swp
+*~
+
+# Ignore version control artifacts
+.git/
+.gitignore
+
+# Ignore Docker-specific files
+.dockerignore
+docker-compose.yml
+docker-compose.override.yml
+
+# Ignore any sensitive or confidential data
+secrets/
+.env
+
+# Ignore documentation and README files
+README.md
+docs/
