@@ -4,11 +4,13 @@
   "description": "This directory is for the code of the _server B_. A starter Dockerfile has been added, it has some comments to get you started.",
   "main": "server_b.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server_b.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.10.3",
     "express": "^4.19.2"
   }
 }

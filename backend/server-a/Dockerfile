@@ -13,6 +13,9 @@ RUN npm install
 # Copy the current directory contents into the container at /app
 COPY . .
 
+# Change permissions of wait-for-it.sh
+RUN chmod +x ./utils/wait-for-it.sh
+
 # Make port 3001 available to the world outside this container
 EXPOSE 3001
 
