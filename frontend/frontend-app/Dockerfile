@@ -1,13 +1,26 @@
-FROM nginx:latest
+# Use official Node.js image as base 
+FROM node:14-alpine 
 
-# Copy the build files to the nginx web root directory
-COPY build /var/www
+# Set the working directory in the container 
+WORKDIR /app 
 
-# Copy the custom nginx configuration file
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy package.json and package-lock.json (if available) 
+COPY package*.json ./ 
 
-# Expose port 3000 for incoming traffic
-EXPOSE 3000
+# Install dependencies 
+RUN npm install 
 
-# Start nginx and keep it running in the foreground
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# Copy the entire project to the working directory 
+COPY . . 
+
+# Build the React app 
+RUN npm run build 
+
+# Set environment variable 
+ENV NODE_ENV=production 
+
+# Expose the port where your app will run 
+EXPOSE 3000 
+
+# Command to run the app 
+CMD ["npm", "start"]
