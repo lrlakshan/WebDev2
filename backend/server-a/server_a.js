@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const OrderRoute = require('./routes/orderRoute');
+const SandwichRoute = require('./routes/sandwichRoute');
 const { specs, swaggerUi } = require('./swagger/swagger');
 const PORT = process.env.PORT || 3001;
 
@@ -23,7 +24,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/api/v1', OrderRoute);
-
+app.use('/api/v1/sandwichRoute', SandwichRoute);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
