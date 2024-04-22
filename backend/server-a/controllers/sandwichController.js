@@ -43,7 +43,7 @@ const Sandwich = require('../models/sandwich');
 
 /**
  * @swagger
- * /api/v1/sandwich:
+ * /api/v1/sandwichRoute/sandwich:
  *   post:
  *     summary: Create a new sandwich
  *     tags: [Sandwiches]
@@ -86,7 +86,7 @@ const saveSandwich = async (req, res, next) => {
 };
 /**
  * @swagger
- * /api/v1/sandwich:
+ * /api/v1/sandwichRoute/sandwich:
  *   get:
  *     summary: Get all sandwiches
  *     tags: [Sandwiches]
@@ -102,11 +102,9 @@ const saveSandwich = async (req, res, next) => {
  */
 const getAllSandwiches = async (req, res) => {
     try {
-        
-      const sandwichId = req.params.id;
-    
-      const sandwich = await Sandwich.findById(sandwichId);
-      console.log(sandwich)
+   
+     
+      const sandwich = await Sandwich.find();
       if (!sandwich) {
         return res.status(404).json({ message: "Sandwich not found" });
       }
@@ -118,7 +116,7 @@ const getAllSandwiches = async (req, res) => {
   };
 /**
  * @swagger
- * /api/v1/sandwich/{sandwichId}:
+ * /api/v1/sandwichRoute/sandwich/{sandwichId}:
  *   get:
  *     summary: Get a specific sandwich by ID
  *     tags: [Sandwiches]
@@ -157,7 +155,7 @@ const getAllSandwiches = async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/sandwich/{sandwichId}:
+ * /api/v1/sandwichRoute/updateSandwich/{sandwichId}:
  *   put:
  *     summary: Update a sandwich by ID
  *     tags: [Sandwiches]
@@ -186,9 +184,8 @@ const getAllSandwiches = async (req, res) => {
     try {
       const sandwichId = req.params.id; // Extract sandwich ID from route parameters
       const updates = req.body; // Extract updates from request body
-  
+     
       const updatedSandwich = await Sandwich.findByIdAndUpdate(sandwichId, updates, { new: true });
-  
       if (!updatedSandwich) {
         return res.status(404).json({ message: "Sandwich not found" });
       }
@@ -201,7 +198,7 @@ const getAllSandwiches = async (req, res) => {
   };
   /**
  * @swagger
- * /api/v1/sandwich/{sandwichId}:
+ * /api/v1/sandwichRoute/deleteSandwich/{sandwichId}:
  *   delete:
  *     summary: Delete a sandwich by ID
  *     tags: [Sandwiches]
