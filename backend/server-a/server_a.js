@@ -24,7 +24,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/api/v1', OrderRoute);
-app.use('/api/v1/sandwichRoute', SandwichRoute);
+app.use('/api/v1', SandwichRoute);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -1,4 +1,5 @@
 const Sandwich = require('../models/sandwich');
+
 /**
  * @swagger
  * components:
@@ -6,14 +7,10 @@ const Sandwich = require('../models/sandwich');
  *     Sandwich:
  *       type: object
  *       required:
- *         - id
  *         - name
  *         - toppings
  *         - breadType
  *       properties:
- *         id:
- *           type: number
- *           description: ID of the sandwich
  *         name:
  *           type: string
  *           description: Name of the sandwich
@@ -22,9 +19,6 @@ const Sandwich = require('../models/sandwich');
  *           items:
  *             type: object
  *             properties:
- *               id:
- *                 type: number
- *                 description: ID of the topping
  *               name:
  *                 type: string
  *                 description: Name of the topping
@@ -43,50 +37,60 @@ const Sandwich = require('../models/sandwich');
 
 /**
  * @swagger
- * /api/v1/sandwichRoute/sandwich:
+ * /api/v1/sandwich:
  *   post:
  *     summary: Create a new sandwich
  *     tags: [Sandwiches]
- *     parameters:
- *       - in: body
- *         name: body
- *         required: true
- *         schema:
- *           $ref: '#/components/schemas/Sandwich'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Sandwich'
  *     responses:
  *       201:
  *         description: Successfully created sandwich
- *         schema:
- *           $ref: '#/components/schemas/Sandwich'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sandwich'
+ *             example:
+ *               id: 1
+ *               name: my-sandwich
+ *               toppings:
+ *                 - id: 1
+ *                   name: lettuce
+ *               breadType: whole grain
  *       500:
  *         description: Internal server error
  */
 
 
 
+
 const saveSandwich = async (req, res, next) => {
   try {
-    const { id, name, toppings, breadType } = req.body;
-
-    // Creating a new sandwich instance
+    const { name, toppings, breadType } = req.body;
+    console.log(req.body)
+    // Creating a new sandwich instance without the `id` property
     const sandwich = new Sandwich({
-      id,
       name,
       toppings,
       breadType,
     });
     // Saving the sandwich to the database
     const savedSandwich = await sandwich.save();
-
+    console.log(savedSandwich);
     res.status(201).json(savedSandwich);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
+
 /**
  * @swagger
- * /api/v1/sandwichRoute/sandwich:
+ * /api/v1/sandwich:
  *   get:
  *     summary: Get all sandwiches
  *     tags: [Sandwiches]
@@ -116,7 +120,7 @@ const getAllSandwiches = async (req, res) => {
   };
 /**
  * @swagger
- * /api/v1/sandwichRoute/sandwich/{sandwichId}:
+ * /api/v1/sandwich/{sandwichId}:
  *   get:
  *     summary: Get a specific sandwich by ID
  *     tags: [Sandwiches]
@@ -155,7 +159,7 @@ const getAllSandwiches = async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/sandwichRoute/updateSandwich/{sandwichId}:
+ * /api/v1/sandwich/{sandwichId}:
  *   put:
  *     summary: Update a sandwich by ID
  *     tags: [Sandwiches]
@@ -165,11 +169,12 @@ const getAllSandwiches = async (req, res) => {
  *         required: true
  *         type: string
  *         description: ID of the sandwich to update
- *       - in: body
- *         name: body
- *         required: true
- *         schema:
- *           $ref: '#/components/schemas/Sandwich'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Sandwich'
  *     responses:
  *       200:
  *         description: Successfully updated sandwich
@@ -180,11 +185,12 @@ const getAllSandwiches = async (req, res) => {
  *       500:
  *         description: Internal server error
  */
+
   const updateSandwich = async (req, res) => {
     try {
       const sandwichId = req.params.id; // Extract sandwich ID from route parameters
       const updates = req.body; // Extract updates from request body
-     
+      console.log(req.body)
       const updatedSandwich = await Sandwich.findByIdAndUpdate(sandwichId, updates, { new: true });
       if (!updatedSandwich) {
         return res.status(404).json({ message: "Sandwich not found" });
@@ -198,7 +204,7 @@ const getAllSandwiches = async (req, res) => {
   };
   /**
  * @swagger
- * /api/v1/sandwichRoute/deleteSandwich/{sandwichId}:
+ * /api/v1/sandwich/{sandwichId}:
  *   delete:
  *     summary: Delete a sandwich by ID
  *     tags: [Sandwiches]

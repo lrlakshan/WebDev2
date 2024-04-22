@@ -6,8 +6,8 @@ const router = express.Router();
 router.post('/sandwich', SandwichController.saveSandwich);
 router.get('/sandwich', SandwichController.getAllSandwiches);
 router.get('/sandwich/:id', SandwichController.getSandwichByID);
-router.put('/updateSandwich/:id', SandwichController.updateSandwich);
-router.delete('/deleteSandwich/:id', SandwichController.deleteSandwich);
+router.put('/sandwich/:id', SandwichController.updateSandwich);
+router.delete('/sandwich/:id', SandwichController.deleteSandwich);
 // GET endpoint to retrieve all sandwichs
 //router.get('/sandwich', SandwichController.getAllsandwichs);
 
