@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '100mb' })); // Parsing JSON request bodies with size limit
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/sandwichProject', {
+mongoose.connect('mongodb://mongo:27017/sandwichProject', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });

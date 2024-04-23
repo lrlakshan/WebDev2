@@ -1,4 +1,4 @@
-const Sandwich = require('../models/sandwich');
+const Sandwich = require("../models/sandwich");
 
 /**
  * @swagger
@@ -65,13 +65,9 @@ const Sandwich = require('../models/sandwich');
  *         description: Internal server error
  */
 
-
-
-
 const saveSandwich = async (req, res, next) => {
   try {
     const { name, toppings, breadType } = req.body;
-    console.log(req.body)
     // Creating a new sandwich instance without the `id` property
     const sandwich = new Sandwich({
       name,
@@ -83,7 +79,6 @@ const saveSandwich = async (req, res, next) => {
     console.log(savedSandwich);
     res.status(201).json(savedSandwich);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -105,19 +100,16 @@ const saveSandwich = async (req, res, next) => {
  *         description: Internal server error
  */
 const getAllSandwiches = async (req, res) => {
-    try {
-   
-     
-      const sandwich = await Sandwich.find();
-      if (!sandwich) {
-        return res.status(404).json({ message: "Sandwich not found" });
-      }
-      res.status(200).json(sandwich);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: err.message });
+  try {
+    const sandwich = await Sandwich.find();
+    if (!sandwich) {
+      return res.status(404).json({ message: "Sandwich not found" });
     }
-  };
+    res.status(200).json(sandwich);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 /**
  * @swagger
  * /api/v1/sandwich/{sandwichId}:
@@ -140,22 +132,20 @@ const getAllSandwiches = async (req, res) => {
  *       500:
  *         description: Internal server error
  */
-   
-  const getSandwichByID = async (req, res) => {
-    try {
-      const sandwichId = req.params.id;
-      console.log(req.params.id);
-      const sandwich = await Sandwich.findById(sandwichId);
-      console.log(sandwich)
-      if (!sandwich) {
-        return res.status(404).json({ message: "Sandwich not found" });
-      }
-      res.status(200).json(sandwich);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: err.message });
+
+const getSandwichByID = async (req, res) => {
+  try {
+    const sandwichId = req.params.id;
+    const sandwich = await Sandwich.findById(sandwichId);
+    if (!sandwich) {
+      return res.status(404).json({ message: "Sandwich not found" });
     }
-  };
+    res.status(200).json(sandwich);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+};
 
 /**
  * @swagger
@@ -186,23 +176,25 @@ const getAllSandwiches = async (req, res) => {
  *         description: Internal server error
  */
 
-  const updateSandwich = async (req, res) => {
-    try {
-      const sandwichId = req.params.id; // Extract sandwich ID from route parameters
-      const updates = req.body; // Extract updates from request body
-      console.log(req.body)
-      const updatedSandwich = await Sandwich.findByIdAndUpdate(sandwichId, updates, { new: true });
-      if (!updatedSandwich) {
-        return res.status(404).json({ message: "Sandwich not found" });
-      }
-  
-      res.status(200).json(updatedSandwich);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: err.message });
+const updateSandwich = async (req, res) => {
+  try {
+    const sandwichId = req.params.id; // Extract sandwich ID from route parameters
+    const updates = req.body; // Extract updates from request body
+    const updatedSandwich = await Sandwich.findByIdAndUpdate(
+      sandwichId,
+      updates,
+      { new: true }
+    );
+    if (!updatedSandwich) {
+      return res.status(404).json({ message: "Sandwich not found" });
     }
-  };
-  /**
+
+    res.status(200).json(updatedSandwich);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+/**
  * @swagger
  * /api/v1/sandwich/{sandwichId}:
  *   delete:
@@ -222,22 +214,27 @@ const getAllSandwiches = async (req, res) => {
  *       500:
  *         description: Internal server error
  */
-  const deleteSandwich = async (req, res) => {
-    try {
-      const sandwichId = req.params.id; // Extract sandwich ID from route parameters
-  
-      // Delete the sandwich by ID
-      const deletedSandwich = await Sandwich.findByIdAndDelete(sandwichId);
-  
-      if (!deletedSandwich) {
-        return res.status(404).json({ message: "Sandwich not found" });
-      }
-  
-      res.status(200).json({ message: "Sandwich deleted successfully" });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: err.message });
+const deleteSandwich = async (req, res) => {
+  try {
+    const sandwichId = req.params.id; // Extract sandwich ID from route parameters
+
+    // Delete the sandwich by ID
+    const deletedSandwich = await Sandwich.findByIdAndDelete(sandwichId);
+
+    if (!deletedSandwich) {
+      return res.status(404).json({ message: "Sandwich not found" });
     }
-  };
-  
-module.exports = { saveSandwich, getAllSandwiches, getSandwichByID, updateSandwich, deleteSandwich  };
+
+    res.status(200).json({ message: "Sandwich deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = {
+  saveSandwich,
+  getAllSandwiches,
+  getSandwichByID,
+  updateSandwich,
+  deleteSandwich,
+};
