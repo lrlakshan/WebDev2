@@ -12,7 +12,7 @@ const { rabbitHost, queue1 } = require("../config");
  *         - sandwichId
  *       properties:
  *         sandwichId:
- *           type: number
+ *           type: string
  *           description: ID of the sandwich
  *         status:
  *           type: string
@@ -42,7 +42,7 @@ const { rabbitHost, queue1 } = require("../config");
  *             type: object
  *             properties:
  *               sandwichId:
- *                 type: number
+ *                 type: string
  *                 description: ID of the sandwich
  *               status:
  *                 type: string
@@ -70,7 +70,7 @@ const { rabbitHost, queue1 } = require("../config");
  *               type: object
  *               properties:
  *                 sandwichId:
- *                   type: number
+ *                   type: string
  *                   example: 123
  *                 status:
  *                   type: string
