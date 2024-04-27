@@ -16,6 +16,15 @@ const options = {
         description: 'Server A',
       },
     ],
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'access_token'
+        }
+      },
+    },
   },
   apis: [path.resolve(__dirname, '../controllers/*.js')], // Path to controller files
 };

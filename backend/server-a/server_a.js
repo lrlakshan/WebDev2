@@ -2,8 +2,10 @@ const express = require("express");
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const OrderRoute = require('./routes/orderRoute');
 const SandwichRoute = require('./routes/sandwichRoute');
+const UserRoute = require('./routes/userRoute');
 const { specs, swaggerUi } = require('./swagger/swagger');
 const PORT = process.env.PORT || 3001;
 
@@ -11,6 +13,8 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '100mb' })); // Parsing JSON request bodies with size limit
+
+app.use(cookieParser());
 
 // Connect to MongoDB
 mongoose.connect('mongodb://mongo:27017/sandwichProject', {
@@ -25,6 +29,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/api/v1', OrderRoute);
 app.use('/api/v1', SandwichRoute);
+app.use('/api/v1/user', UserRoute);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
