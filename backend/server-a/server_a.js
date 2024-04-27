@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require('mongoose');
+const { getTask } = require('./rabbit-utils/receiveTask.js');
+const { rabbitHost, queue2 } = require('./config');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -31,6 +33,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/v1', OrderRoute);
 app.use('/api/v1', SandwichRoute);
 app.use('/api/v1/user', UserRoute);
+
+getTask(rabbitHost, queue2);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
