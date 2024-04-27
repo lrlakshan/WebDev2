@@ -76,7 +76,6 @@ const saveSandwich = async (req, res, next) => {
     });
     // Saving the sandwich to the database
     const savedSandwich = await sandwich.save();
-    console.log(savedSandwich);
     res.status(201).json(savedSandwich);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -89,6 +88,8 @@ const saveSandwich = async (req, res, next) => {
  *   get:
  *     summary: Get all sandwiches
  *     tags: [Sandwiches]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: A list of sandwiches
