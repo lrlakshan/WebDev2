@@ -7,7 +7,7 @@ const OrderStatusEnum = ['ordered', 'received', 'inQueue', 'ready', 'failed'];
 // Define the schema for an order
 const orderSchema = new Schema({
   sandwichId: {
-    type: Number,
+    type: String,
     required: true // Ensure that sandwichId is a required field
   },
   status: {
