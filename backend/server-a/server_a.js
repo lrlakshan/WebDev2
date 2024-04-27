@@ -9,14 +9,13 @@ const UserRoute = require('./routes/userRoute');
 const { specs, swaggerUi } = require('./swagger/swagger');
 const PORT = process.env.PORT || 3001;
 const app = express();
-app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '100mb' })); // Parsing JSON request bodies with size limit
 
 app.use(cookieParser());
 app.use(cors({
-  origin: '*', // replace with your application's origin
-  credentials: true
+  origin: 'http://localhost:3000', // specify the origin
+  credentials: true, // allowing credentials
 }));
 // Connect to MongoDB
 mongoose.connect('mongodb://mongo:27017/sandwichProject', {

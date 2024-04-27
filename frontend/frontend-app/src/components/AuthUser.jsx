@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
+
 export const AuthUser = ({ isLoggedIn, onLogin, onRegister, onLogout }) => {
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(true);
   const [isRegisterFormVisible, setIsRegisterFormVisible] = useState(false);
@@ -90,11 +90,4 @@ export const AuthUser = ({ isLoggedIn, onLogin, onRegister, onLogout }) => {
       )}
     </div>
   );
-};
- 
-AuthUser.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  onLogin: PropTypes.func.isRequired,
-  onRegister: PropTypes.func.isRequired,
-  onLogout: PropTypes.func.isRequired,
 };
