@@ -171,4 +171,17 @@ const getOrderByID = async (req, res) => {
   }
 };
 
-module.exports = { addNewOrder, getAllOrders, getOrderByID }; // Exporting controller functions for use in routes
+const updateOrderStatus = async (orderId, status) => {
+  try {
+    const order = await OrderSchema.findByIdAndUpdate(orderId, { status: status }, { new: true });
+    if (!order) {
+      throw new Error('Order not found');
+    }
+    return order;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
+module.exports = { addNewOrder, getAllOrders, getOrderByID, updateOrderStatus }; // Exporting controller functions for use in routes
