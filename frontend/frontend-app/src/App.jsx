@@ -48,8 +48,6 @@ const App = () => {
 
   const register = async (username, password) => {
     try {
-   
-      // Make an API request to register a new user
       const response = await fetch(url + '/user', {
         method: 'POST',
         headers: {
@@ -59,9 +57,6 @@ const App = () => {
       });
 
       const data = await response.json();
-      
-
-      // Assign extracted values to refs
       usernameRef.current = data.username;
       passwordRef.current = password;
       setIsLoggedIn(true);
@@ -74,7 +69,6 @@ const App = () => {
   
   const login = async (username, password) => {
     try {
-      // Make an API request to fetch players with credentials for login
       const response = await fetch(url + '/user/login', {
         method: 'POST',
         headers: {
@@ -102,8 +96,6 @@ const App = () => {
   const logout = () => {
     // Reset app state on logout
     setIsLoggedIn(false);
-    // setPlayers([]);
-    // setSelectedPlayer(null);
   };
 
   return (
