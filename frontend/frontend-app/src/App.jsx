@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ListSandwiches } from "./components/ListSandwiches.jsx";
 import { ListOrders } from "./components/ListOrders.jsx";
 import { AuthUser } from "./components/AuthUser.jsx";
+import { AddSandwich } from "./components/AddSandwich.jsx";
 const url = "http://localhost:3001/api/v1";
 
 const App = () => {
@@ -129,6 +130,7 @@ const App = () => {
         <div>
           <ListSandwiches sandwiches={sandwiches} />
           <ListOrders orders={orders} />
+          <AddSandwich />
         </div>
       )}
     </div>
