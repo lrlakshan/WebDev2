@@ -10,6 +10,10 @@ const orderSchema = new Schema({
     type: String,
     required: true // Ensure that sandwichId is a required field
   },
+  customerId: {
+    type: String,
+    required: true // Ensure that customerId is a required field
+  },
   status: {
     type: String,
     enum: OrderStatusEnum, // Limiting the status to predefined values in OrderStatusEnum
