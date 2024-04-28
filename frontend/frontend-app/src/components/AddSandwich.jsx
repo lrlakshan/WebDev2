@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const url = "http://localhost:3001/api/v1";
 
-export const AddSandwich = () => {
+export const AddSandwich = ({onAddSandwich}) => {
   const [newSandwich, setNewSandwich] = useState({ toppings: [] });
   const [newTopping, setNewTopping] = useState("");
 
@@ -40,8 +40,13 @@ export const AddSandwich = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
+
       setNewSandwich({ toppings: [] });
       setNewTopping("");
+
+      onAddSandwich(data);
     } catch (error) {
       console.error(error);
     }
