@@ -46,7 +46,6 @@ React FrontEnd -> http://localhost:3000
 - Login as Admin with following credetials (username - admin, password - password)
 - Add any amount sandwiches you want as the admin. (Only admin can add sandwiches)
 - After add, you will see sandwich types and you can view more details
-- Also you can modify and delete sandwiches
 - Then logout from admin
 
 ### 📦 Lets order sandwich
