@@ -35,6 +35,7 @@ export const AddSandwich = ({onAddSandwich}) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newSandwich),
+        credentials: "include",
       });
 
       if (!response.ok) {

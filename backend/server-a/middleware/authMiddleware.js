@@ -52,6 +52,31 @@ const authenticateCustomer = (req, res, next) => {
 };
 
 /**
+ * Middleware to authenticate both admin and customer users.
+ * It verifies the JWT token and checks if the user type is either 'admin' or 'customer'.
+ * If the token is valid and the user type is either 'admin' or 'customer', it adds the decoded token to the request object and calls the next middleware.
+ * If the token is invalid or the user type is neither 'admin' nor 'customer', it sends a 401 or 403 response.
+ */
+const authenticateBoth = (req, res, next) => {
+    const token = req.cookies["access_token"];
+
+    if (!token) {
+        return res.status(401).json({ message: "Authentication required" });
+    }
+
+    try {
+        const decodedToken = jwt.verify(token, secretKey);
+        if (decodedToken.userType !== "admin" && decodedToken.userType !== "customer") {
+            return res.status(403).json({ message: "Access forbidden" });
+        }
+        req.user = decodedToken;
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: "Invalid token" });
+    }
+};
+
+/**
  * Function to sign a JWT token.
  * It takes a payload and options as arguments and returns a signed JWT token.
  * The payload is the data that you want to include in the token.
@@ -61,4 +86,4 @@ const signToken = (payload, options) => {
   return jwt.sign(payload, secretKey, options);
 };
 
-module.exports = { authenticateAdmin, authenticateCustomer, signToken };
+module.exports = { authenticateAdmin, authenticateCustomer, authenticateBoth, signToken };
