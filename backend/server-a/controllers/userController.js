@@ -49,6 +49,8 @@ const { signToken } = require("../middleware/authMiddleware");
  *                   type: string
  *                 userType:
  *                   type: string
+ *                 _id:
+ *                   type: string
  *       400:
  *         description: Bad Request
  */
@@ -75,7 +77,7 @@ const register = async (req, res) => {
     // Save user to database
     await userToDB.save();
 
-    const user = { username, userType: "customer" };
+    const user = { username, userType: "customer", _id: userToDB._id };
 
     const accessToken = signToken(user, { expiresIn: "1h" });
 
@@ -84,7 +86,7 @@ const register = async (req, res) => {
         sameSite: "strict",
     });
 
-    res.status(201).json({ message: 'User created successfully', username: user.username, userType: user.userType });
+    res.status(201).json({ message: 'User created successfully', username: user.username, userType: user.userType, _id: user._id });
 };
 
 /**
@@ -113,6 +115,8 @@ const register = async (req, res) => {
  *                   type: string
  *                 userType:
  *                   type: string
+ *                 _id:
+ *                   type: string
  *       401:
  *         description: Unauthorized
  */
@@ -140,7 +144,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
-    user = { username, userType: "customer" };
+    user = { username, userType: "customer", _id: userFound._id };
   }
 
   const accessToken = signToken(user, { expiresIn: "1h" });
@@ -150,7 +154,7 @@ const login = async (req, res) => {
     sameSite: "strict",
   });
 
-  res.status(200).json({ message: 'User logged in successfully', username: user.username, userType: user.userType });
+  res.status(200).json({ message: 'User logged in successfully', username: user.username, userType: user.userType, _id: user._id });
 };
 
 /**
