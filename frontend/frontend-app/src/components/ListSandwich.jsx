@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { SandwichDetails } from "./SandwichDetails.jsx";
 import Modal from "./Modal";
+import OrderConfirmation from "./OrderConfirmation.jsx";
 
 const url = "http://localhost:3001/api/v1";
 
-export const ListSandwich = ({ sandwich }) => {
+export const ListSandwich = ({ sandwich, onOrder }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showOrderModal, setShowOrderModal] = useState(false);
 
   const handleSandwichClick = (e) => {
     e.preventDefault();
@@ -16,7 +18,11 @@ export const ListSandwich = ({ sandwich }) => {
     setShowModal(false);
   };
 
-  const handleOrderClick= async () => {
+  const closeOrderModal = () => {
+    setShowOrderModal(false);
+  };
+
+  const handleOrderClick= async (sandwich) => {
     try {
       const response = await fetch(url + "/order", {
         method: "POST",
@@ -32,15 +38,17 @@ export const ListSandwich = ({ sandwich }) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
+      onOrder(data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleOrderConfirmation = () => {
-    if (window.confirm("Are you sure you want to place this order?")) {
-      handleOrderClick();
-    }
+  const handleOrderConfirmation = (e) => {
+    e.preventDefault();
+    setShowOrderModal(true);
   };
 
   return (
@@ -60,6 +68,11 @@ export const ListSandwich = ({ sandwich }) => {
       {showModal && (
         <Modal onClose={closeModal}>
           <SandwichDetails sandwich={sandwich} onClose={closeModal} />
+        </Modal>
+      )}
+      {showOrderModal && (
+        <Modal onClose={closeModal}>
+          <OrderConfirmation sandwich={sandwich} handleOrder={handleOrderClick} onClose={closeOrderModal} />
         </Modal>
       )}
     </li>
