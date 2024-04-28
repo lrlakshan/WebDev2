@@ -3,7 +3,10 @@ import { ListSandwiches } from "./components/ListSandwiches.jsx";
 import { ListOrders } from "./components/ListOrders.jsx";
 import { AuthUser } from "./components/AuthUser.jsx";
 import { AddSandwich } from "./components/AddSandwich.jsx";
-const url = "http://localhost:3001/api/v1";
+import socketIOClient from "socket.io-client";
+
+const ENDPOINT = "http://localhost:3001";
+const URL = `${ENDPOINT}/api/v1`;
 
 const App = () => {
   const [sandwiches, setSandwiches] = useState([]);
@@ -15,9 +18,18 @@ const App = () => {
   useEffect(() => {
     fetchAllSandwiches();
     fetchAllOrders();
+
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("orders_updated", updatedOrder => {
+      setOrders(prevOrders => prevOrders.map(order => 
+        order._id === updatedOrder._id ? updatedOrder : order
+      ));
+    });
+
+    // Clean up the effect
+    return () => socket.disconnect();
   }, [isLoggedIn]);
 
-  // When the component mounts, check if the userType is in localStorage
   useEffect(() => {
     const userType = localStorage.getItem("userType");
     if (userType) {
@@ -27,7 +39,7 @@ const App = () => {
 
   const fetchAllSandwiches = async () => {
     try {
-      const response = await fetch(url + "/sandwich", {
+      const response = await fetch(URL + "/sandwich", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +54,7 @@ const App = () => {
 
   const fetchAllOrders = async () => {
     try {
-      const response = await fetch(url + "/order", {
+      const response = await fetch(URL + "/order", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +69,7 @@ const App = () => {
 
   const register = async (username, password) => {
     try {
-      const response = await fetch(url + "/user", {
+      const response = await fetch(URL + "/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,7 +88,7 @@ const App = () => {
 
   const login = async (username, password) => {
     try {
-      const response = await fetch(url + "/user/login", {
+      const response = await fetch(URL + "/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,7 +113,7 @@ const App = () => {
 
   const logout = async () => {
     try {
-      const response = await fetch(url + "/user/logout", {
+      const response = await fetch(URL + "/user/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
