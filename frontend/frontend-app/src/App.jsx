@@ -70,7 +70,7 @@ const App = () => {
   };
 
   const updateOrdersList = (newOrder) => {
-    setSandwiches((prevOrders) => {
+    setOrders((prevOrders) => {
       return [...prevOrders, newOrder];
     });
   };
