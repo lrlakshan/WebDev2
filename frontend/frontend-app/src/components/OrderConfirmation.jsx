@@ -15,9 +15,9 @@ const OrderConfirmation = ({sandwich, handleOrder, onClose}) => {
             <h1>Order Confirmation</h1>
             <p>Are you sure you want to confirm this order?</p>
             <br /><br />
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <button className="btn-add" onClick={handleConfirm}>Confirm</button>
-                <button className="btn-update" onClick={handleCancel}>Cancel</button>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <button className="btn-update" onClick={handleCancel} style={{ margin: '0 10px' }}>Cancel</button>
+                <button className="btn-add" onClick={handleConfirm} style={{ margin: '0 10px' }}>Confirm</button>
             </div>
         </div>
     );
