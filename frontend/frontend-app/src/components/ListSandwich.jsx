@@ -34,6 +34,7 @@ export const ListSandwich = ({ sandwich, onOrder }) => {
           customerId: localStorage.getItem("customerId"),
           status: 'ordered',
         }),
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

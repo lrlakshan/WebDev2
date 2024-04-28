@@ -82,6 +82,7 @@ const App = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
       const data = await response.json();
       setSandwiches(data);
@@ -97,6 +98,7 @@ const App = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
       const data = await response.json();
       setOrders(data);
@@ -112,6 +114,7 @@ const App = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
       const data = await response.json();
       setOrders(data);
