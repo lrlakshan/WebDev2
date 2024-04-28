@@ -5,6 +5,8 @@
 'use strict';
 
 var amqp = require('amqplib');
+const { addTask } = require("./sendTask");
+const configs= require("../config");
 
 
 module.exports.getTask = function(rabbitHost, queueName){
@@ -24,9 +26,16 @@ module.exports.getTask = function(rabbitHost, queueName){
         console.log(" [x] Received '%s'", body);
         var secs = body.split('.').length - 1;
         //console.log(" [x] Task takes %d seconds", secs);
+
+        var order = JSON.parse(body);
+
+        // Modify the status property
+        order.status = 'ready';
+
         setTimeout(function() {
           console.log(new Date(), " [x] Done");
           ch.ack(msg);
+          addTask(configs.rabbitHost, configs.queue2, order); // Send the order to the RabbitMQ work queue
         }, 10000);
       }
     });

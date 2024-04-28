@@ -1,88 +1,78 @@
-# COMP.CS.510 Web Development 2 - Group project work repository
+<h1 align=center>Sandwich App</h1>
 
-Hello WebDevelopers!
 
-This repository is the home for all of your group's code and documentation during this project.  
+## 🚀 Getting Started
 
-## Documentation of the system and group's work
 
-For the final submission, all group documentation must be provided in a single PDF file in the root directory of this repository. Do not add any documentation into the course_documentation folder, as that can be used by course personnel to add new content without causing merge issues.
+### 👉 First things first
 
-You may use Markdown (.md) or any other documentation method to keep track of documentation during the project, as long as it can be accessed from the repository.
+```bash
+Clone the repository
+```
+###
 
-### Required documentation
+### 👉 Setting up Backend
 
-The documentation required includes the project plan, architectural description of the system, the technologies used, the progress of the group's work, as well as what the group's members learned during this project. Groups also must document where the components of their system are placed in the repository, and how the course personnel can deploy the group's system on their own computers when testing it.
+```bash
+Go to project directory in terminal
+Run "docker compose up"
+```
+###
 
-Groups can of course add any extra documentation they feel is useful, and if course personnel finds the documentation useful and well-written, this extra documentation will affect the points positively.
+### 👉 Setting up Frontend
 
-### Project plan
+```bash
+Open up another terminal 
+Direct to frontend (cd frontend/frontend-app)
+Then run "npm run start"
+```
+###
 
-The following subsection tells what should be documented under _Project plan_ section.
+### 👉 Process explained
 
-#### Course project group information
+```bash
+"docker compose up" will open up following servers
+Server-A -> http://localhost:3001
+Server-B -> http://localhost:3002
+RabbitMQ dashboard -> http://localhost:15672
 
-Start the documentation with identifying information:
-- The name, student number, and TUNI email for each group member
-- Group name
-- GitLab repo URL
+"npm run start" will open up following server
+React FrontEnd -> http://localhost:3000
+```
+###
 
-#### Working during the project
+### 📦 First add some sandwich types to system
 
-The initial timetable for the research, design and implementation of the architecture
+- Login as Admin with following credetials (username - admin, password - password)
+- Add any amount sandwiches you want as the admin. (Only admin can add sandwiches)
+- After add, you will see sandwich types and you can view more details
+- Also you can modify and delete sandwiches
+- Then logout from admin
 
-Which group member(s) will be responsible for what
+### 📦 Lets order sandwich
 
-How much time each group member promises to group project work per week. Note down each member's promise for committed hours for this project
+- Now go to Register and register as a customer
+- Now you can order any sandwich as a customer which admin added to the system
+- You can see details of the sandwich by pressing more details
+- Press order to make an order
+- After you press order, order will come under my orders with status of ordered
+- Within 10 seconds your order will be prepared and status will be updated.
+- Feel free to order sandwiches as much as you want 😉
+- Then logout. If you want you can log back in with registered credentials
 
-#### GitLab Issue Boards
+### 📦 Now register as another customer
 
-**It is recommended that your group uses GitLab’s Issue Board for assigning tasks to members.** Issue Boards offer Kanban-like project management in an easily accessible form.
+- Now go to Register and register as a new customer
+- When you log in you will see only your orders (But as you are a new user, there will be no orders)
+- Specific user may see only his/her orders
+- Now you can order again 
+- Then logout
 
-In GitLab, you can have easy, lightweight project management by using the Issue Board of your repo, [see GitLab’s Issue Board documentation](https://docs.gitlab.com/ee/user/project/issue_board.html). You can find the Issue Board from GitLab’s left panel menu: go to your group repo’s GitLab frontpage -> Issues -> Board.
+### 📦 Log back as admin
 
-A short Youtube video introduction to Issue Board [“Announcing the GitLab Issue Board”](https://www.youtube.com/watch?v=UWsJ8tkHAa8). You should be able to see the basic idea and functioning.
+- Use the admin credentials (username - admin, password - password)
+- Now you will see all two customers total orders
 
-When using the Issue Board, your group should first discuss what lists you would like to use, “To do”, "Research", and “Doing” are the defaults that are offered to be created for a new issue board. Then, whenever your group starts new tasks, or you have an issue (bug, improvement, etc…) with your code, then you should create issues in GitLab for these. Then your group assigns each issue/task to group member(s). The assigned student is responsible for handling the issue, and moving it from that list to next in the Issue Board, until it is in the “Closed”/"Done"/"Revied" list.
+###
 
-Your group should decide who and when will create the GitLab issues and assign them to members.
-
-### Documentation of the created system
-
-The following describes what needs to be documented during the project.
-
-Those groups that use other technologies/architecture than described need to apply these instructions to fit their choices.
-
-#### System architecture
-
-The focus should be on applying what has been learned in the course about Web Architecture. Using proper architectural descriptions and UML diagrams would be appropriate, but the groups are welcome to use any reasonable way of describing the system.
-
-Matters to describe include architectural patterns, components, component's roles, communication within the system and with external components, and others things, that the group finds important when describing the architecture. Describe the system with enough detail, so that a technical person with no prior knowledge of the system would be able to understand it. Use images and diagrams whenever you are able.
-
-It is important to evaluate the architecture and compare it to other possible architectures. Elaborate on the strengths and weaknesses of this architecture when compared to its purpose and tasks as described in the assignment document. Consider other architectures that would have been able to fulfill the system's described purpose and tasks. This part is where your group gets to explore architectures that could have been used to produce a system with the same or at least similar functionality. The sky is the limit here, get creative!
-
-#### Used technologies
-
-Description of the technologies used in the system (Node, RabbitMQ, AMPQ, ...), how the technologies were used in the project, and the group's view of the technologies from your use. Could other/better alternatives have been used? Or is there an alternative that would have been more interesting to the group?
-
-#### How the produced system can be tested
-
-Here group describes how course personnel can test their system. A complete HOWTO on running your system, with easily copy-pastable examples.
-
-### Learnign during the project
-
-A group learning diary, where group members note down the learning during the project. Short descriptions of who, what, and when are sufficient. Could be a link to GitLab Issue, that has more information.
-
-This information is interesting to the course personnel, too. We get to see if the project enabled learning as designed.
-
-## Coding during the project
-
-Code for each component _must_ be placed in its own directories to maintain a healthy repository. For the groups' convenience sub-directories for _server-a_, _rabbitmq_, and _server-b_ have been created in the repository. Groups can choose to use this directory structure, or groups can remove/modify it to their needs, as long as the code for each component is placed in its own directory.
-
-The directories have files like _Dockerfiles_ that groups can use as the basis of their work, but as with the directory structure, the groups are free to do with them as they will. Groups should however read through the files, even if they choose to remove them, as they contain help and comments.
-
-Docker Compose file _'docker-compose.yml'_ must be placed in the root directory of the repository where it is now.
-
-Commenting your code is important in places where the code might not be immediately obvious. Comments should be detailed enough that people outside your group can understand the code with the help of the comments.
-
-The `docker-compose.yml` -file and other files have comments by the course personnel. Groups can remove these comments if they wish to do so.
+####
