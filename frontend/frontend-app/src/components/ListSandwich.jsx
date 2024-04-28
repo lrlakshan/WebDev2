@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { SandwichDetails } from "./SandwichDetails.jsx";
 import Modal from "./Modal";
 
+const url = "http://localhost:3001/api/v1";
+
 export const ListSandwich = ({ sandwich }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -14,6 +16,32 @@ export const ListSandwich = ({ sandwich }) => {
     setShowModal(false);
   };
 
+  const handleOrderClick= async () => {
+    try {
+      const response = await fetch(url + "/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          sandwichId: sandwich._id,
+          status: 'inQueue',
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleOrderConfirmation = () => {
+    if (window.confirm("Are you sure you want to place this order?")) {
+      handleOrderClick();
+    }
+  };
+
   return (
     <li id={`thing-${sandwich._id}`}>
       <a href="#">
@@ -24,7 +52,7 @@ export const ListSandwich = ({ sandwich }) => {
               More Details
             </button>
             &nbsp;&nbsp;
-            <button className="btn-update">Order</button>
+            <button className="btn-update" onClick={handleOrderConfirmation}>Order</button>
           </div>
         </div>
       </a>
