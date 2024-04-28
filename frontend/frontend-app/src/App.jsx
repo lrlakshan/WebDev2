@@ -23,8 +23,13 @@ const App = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
+      if (loggedUserType === ADMIN_USER) {
+        fetchAllSandwiches();
+        fetchAllOrders();
+      } else {
+        fetchCustomerOrders(localStorage.getItem("customerId"));
+      }
       fetchAllSandwiches();
-      fetchAllOrders();
     }
 
     const socket = socketIOClient(ENDPOINT);
@@ -89,6 +94,21 @@ const App = () => {
     }
   };
 
+  const fetchCustomerOrders = async (customerId) => {
+    try {
+      const response = await fetch(`${URL}/order/customer/${customerId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setOrders(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const register = async (username, password) => {
     try {
       const response = await fetch(URL + "/user", {
@@ -107,6 +127,7 @@ const App = () => {
         passwordRef.current = password;
 
         localStorage.setItem("userType", data.userType);
+        localStorage.setItem("customerId", data._id);
         setLoggedUserType(data.userType);
         setIsLoggedIn(true);
       } else {
@@ -134,6 +155,7 @@ const App = () => {
         passwordRef.current = password;
 
         localStorage.setItem("userType", data.userType);
+        localStorage.setItem("customerId", data._id);
         setLoggedUserType(data.userType);
         setIsLoggedIn(true);
       } else {
@@ -157,6 +179,7 @@ const App = () => {
         const data = await response.json();
         setErrorMessage(data.message);
         localStorage.removeItem("userType");
+        localStorage.removeItem("customerId");
         setLoggedUserType("");
         setIsLoggedIn(false);
       }

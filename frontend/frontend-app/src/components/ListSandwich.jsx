@@ -25,6 +25,7 @@ export const ListSandwich = ({ sandwich }) => {
         },
         body: new URLSearchParams({
           sandwichId: sandwich._id,
+          customerId: localStorage.getItem("customerId"),
           status: 'ordered',
         }),
       });

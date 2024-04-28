@@ -12,6 +12,6 @@ router.get('/order', OrderController.getAllOrders);
 router.get('/order/:orderId', OrderController.getOrderByID);
 
 // GET endpoint to retrieve all orders of a specific user
-router.get('/order/:customerId', OrderController.getOrdersByCustomer);
+router.get('/order/customer/:customerId', OrderController.getOrdersByCustomer);
 
 module.exports = router;
