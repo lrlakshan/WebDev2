@@ -41,8 +41,9 @@ export const ListOrder = ({ order }) => {
       <a href="#">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div>{sandwich.name}</div>
-          <div>{order.status}</div>
           <div style={{ display: "flex", alignItems: "center" }}>
+            <div>{order.status}</div>
+            &nbsp;&nbsp;
             <button className="btn-update" onClick={handleOrderClick}>
               More Details
             </button>

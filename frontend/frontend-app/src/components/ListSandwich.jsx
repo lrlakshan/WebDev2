@@ -25,7 +25,7 @@ export const ListSandwich = ({ sandwich }) => {
         },
         body: new URLSearchParams({
           sandwichId: sandwich._id,
-          status: 'inQueue',
+          status: 'ordered',
         }),
       });
       if (!response.ok) {
@@ -52,7 +52,7 @@ export const ListSandwich = ({ sandwich }) => {
               More Details
             </button>
             &nbsp;&nbsp;
-            <button className="btn-update" onClick={handleOrderConfirmation}>Order</button>
+            {(localStorage.getItem("userType") === "customer") && <button className="btn-update" onClick={handleOrderConfirmation}>Order</button>}
           </div>
         </div>
       </a>

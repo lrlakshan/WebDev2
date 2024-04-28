@@ -7,23 +7,33 @@ import socketIOClient from "socket.io-client";
 
 const ENDPOINT = "http://localhost:3001";
 const URL = `${ENDPOINT}/api/v1`;
+const ADMIN_USER = "admin";
+const CUSTOMER_USER = "customer";
 
 const App = () => {
   const [sandwiches, setSandwiches] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedUserType, setLoggedUserType] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    Boolean(localStorage.getItem("userType"))
+  );
   const usernameRef = useRef(""); // Declare username as a ref
   const passwordRef = useRef("");
 
   useEffect(() => {
-    fetchAllSandwiches();
-    fetchAllOrders();
+    if (isLoggedIn) {
+      fetchAllSandwiches();
+      fetchAllOrders();
+    }
 
     const socket = socketIOClient(ENDPOINT);
-    socket.on("orders_updated", updatedOrder => {
-      setOrders(prevOrders => prevOrders.map(order => 
-        order._id === updatedOrder._id ? updatedOrder : order
-      ));
+    socket.on("orders_updated", (updatedOrder) => {
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === updatedOrder._id ? updatedOrder : order
+        )
+      );
     });
 
     // Clean up the effect
@@ -31,9 +41,21 @@ const App = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage(""); // Clear the error message after 3 seconds
+      }, 3000);
+
+      // Clear the timer when the component is unmounted or the error message changes
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+
+  useEffect(() => {
     const userType = localStorage.getItem("userType");
     if (userType) {
       setIsLoggedIn(true);
+      setLoggedUserType(userType);
     }
   }, []);
 
@@ -75,12 +97,21 @@ const App = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
+        credentials: "include",
       });
 
       const data = await response.json();
-      usernameRef.current = data.username;
-      passwordRef.current = password;
-      setIsLoggedIn(true);
+      setErrorMessage(data.message);
+      if (data.username) {
+        usernameRef.current = username;
+        passwordRef.current = password;
+
+        localStorage.setItem("userType", data.userType);
+        setLoggedUserType(data.userType);
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -97,11 +128,13 @@ const App = () => {
         credentials: "include",
       });
       const data = await response.json();
+      setErrorMessage(data.message);
       if (data.username) {
         usernameRef.current = username;
         passwordRef.current = password;
 
         localStorage.setItem("userType", data.userType);
+        setLoggedUserType(data.userType);
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
@@ -121,7 +154,10 @@ const App = () => {
         credentials: "include",
       });
       if (response.ok) {
+        const data = await response.json();
+        setErrorMessage(data.message);
         localStorage.removeItem("userType");
+        setLoggedUserType("");
         setIsLoggedIn(false);
       }
     } catch (error) {
@@ -131,6 +167,7 @@ const App = () => {
 
   return (
     <div>
+      <p>{errorMessage}</p>
       <AuthUser
         isLoggedIn={isLoggedIn}
         onLogin={login}
@@ -138,11 +175,20 @@ const App = () => {
         onLogout={logout}
       />
 
-      {isLoggedIn && (
+      {isLoggedIn && loggedUserType === ADMIN_USER && (
         <div>
           <ListSandwiches sandwiches={sandwiches} />
-          <ListOrders orders={orders} />
           <AddSandwich />
+          <h2>All Orders</h2>
+          <ListOrders orders={orders} />
+        </div>
+      )}
+
+      {isLoggedIn && loggedUserType === CUSTOMER_USER && (
+        <div>
+          <ListSandwiches sandwiches={sandwiches} />
+          <h2>My Orders</h2>
+          <ListOrders orders={orders} />
         </div>
       )}
     </div>

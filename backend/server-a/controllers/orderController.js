@@ -10,10 +10,15 @@ const { rabbitHost, queue1 } = require("../config");
  *       type: object
  *       required:
  *         - sandwichId
+ *         - customerId
+ *         - status
  *       properties:
  *         sandwichId:
  *           type: string
  *           description: ID of the sandwich
+ *         customerId:
+ *            type: string
+ *            description: ID of the customer who made the order
  *         status:
  *           type: string
  *           enum: [ordered, received, inQueue, ready, failed]
@@ -44,6 +49,9 @@ const { rabbitHost, queue1 } = require("../config");
  *               sandwichId:
  *                 type: string
  *                 description: ID of the sandwich
+ *               customerId:
+ *                 type: string
+ *                 description: ID of the customer who made the order
  *               status:
  *                 type: string
  *                 enum: 
@@ -71,7 +79,10 @@ const { rabbitHost, queue1 } = require("../config");
  *               properties:
  *                 sandwichId:
  *                   type: string
- *                   example: 123
+ *                   example: 662c8eaef8a866687edfe0b7
+ *                 customerId:
+ *                   type: string
+ *                   example: 662be7095bb249153575c4c1
  *                 status:
  *                   type: string
  *                   enum:
@@ -85,11 +96,12 @@ const { rabbitHost, queue1 } = require("../config");
 
 const addNewOrder = async (req, res, next) => {
   try {
-    const { sandwichId, status } = req.body;
+    const { sandwichId, customerId, status } = req.body;
 
     // Creating a new order instance
     const order = new OrderSchema({
       sandwichId,
+      customerId,
       status,
     });
 
@@ -171,6 +183,43 @@ const getOrderByID = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/v1/order/customer/{customerId}:
+ *   get:
+ *     summary: Get orders by customer
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: customerId
+ *         required: true
+ *         description: ID of the customer to retrieve orders for
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved orders
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Order'
+ *       404:
+ *         description: Orders not found
+ *       500:
+ *         description: Internal server error
+ */
+const getOrdersByCustomer = async (req, res) => {
+  try {
+    const customerId = req.params.customerId;
+    const orders = await OrderSchema.find({ customerId: customerId });
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 const updateOrderStatus = async (orderId, status) => {
   try {
     const order = await OrderSchema.findByIdAndUpdate(orderId, { status: status }, { new: true });
@@ -184,4 +233,4 @@ const updateOrderStatus = async (orderId, status) => {
   }
 };
 
-module.exports = { addNewOrder, getAllOrders, getOrderByID, updateOrderStatus }; // Exporting controller functions for use in routes
+module.exports = { addNewOrder, getAllOrders, getOrderByID, updateOrderStatus, getOrdersByCustomer }; // Exporting controller functions for use in routes
