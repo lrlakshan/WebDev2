@@ -24,7 +24,6 @@ const App = () => {
   useEffect(() => {
     if (isLoggedIn) {
       if (loggedUserType === ADMIN_USER) {
-        fetchAllSandwiches();
         fetchAllOrders();
       } else {
         fetchCustomerOrders(localStorage.getItem("customerId"));
