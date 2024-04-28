@@ -175,6 +175,24 @@ code {
   flex-direction: column;
   justify-content: space-between;
 }
+
+#submit-thing input {
+  width: 100%;
+  padding: 0.5em;
+  font-size: 1em;
+  margin-bottom: 10px;
+  border-radius: 0.25em;
+  background-color: var(--color-background-mute);
+  border: 1px solid var(--color-background);
+  color: var(--color-text);
+}
+
+#submit-thing input:focus {
+  border-color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  outline: none;
+}
+
 #input-thing {
   flex-grow: 1;
   padding: 0.5em;
