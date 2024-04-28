@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { SandwichDetails } from "./SandwichDetails.jsx";
 import Modal from "./Modal";
 import OrderConfirmation from "./OrderConfirmation.jsx";
+import SandwichDeleteConfirmation from "./SandwichDeleteConfirmation.jsx";
 
 const url = "http://localhost:3001/api/v1";
 
-export const ListSandwich = ({ sandwich, onOrder }) => {
+export const ListSandwich = ({ sandwich, onOrder, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleSandwichClick = (e) => {
     e.preventDefault();
@@ -20,6 +22,10 @@ export const ListSandwich = ({ sandwich, onOrder }) => {
 
   const closeOrderModal = () => {
     setShowOrderModal(false);
+  };
+
+  const closeDeleteModal = () => { 
+    setShowDeleteModal(false);
   };
 
   const handleOrderClick= async (sandwich) => {
@@ -47,9 +53,32 @@ export const ListSandwich = ({ sandwich, onOrder }) => {
     }
   };
 
+  const handleDeleteClick= async (id) => {
+    try {
+      const response = await fetch(url + `/sandwich/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      await response.json().then(() => onDelete(id, true));
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleOrderConfirmation = (e) => {
     e.preventDefault();
     setShowOrderModal(true);
+  };
+
+  const handleSandwichDelete = (e) => {
+    e.preventDefault();
+    setShowDeleteModal(true);
   };
 
   return (
@@ -63,6 +92,7 @@ export const ListSandwich = ({ sandwich, onOrder }) => {
             </button>
             &nbsp;&nbsp;
             {(localStorage.getItem("userType") === "customer") && <button className="btn-update" onClick={handleOrderConfirmation}>Order</button>}
+            {(localStorage.getItem("userType") === "admin") && <button className="btn-delete" onClick={handleSandwichDelete}>Delete</button>}
           </div>
         </div>
       </a>
@@ -74,6 +104,11 @@ export const ListSandwich = ({ sandwich, onOrder }) => {
       {showOrderModal && (
         <Modal onClose={closeModal}>
           <OrderConfirmation sandwich={sandwich} handleOrder={handleOrderClick} onClose={closeOrderModal} />
+        </Modal>
+      )}
+      {showDeleteModal && (
+        <Modal onClose={closeModal}>
+          <SandwichDeleteConfirmation sandwich={sandwich} handleDelete={handleDeleteClick} onClose={closeDeleteModal} />
         </Modal>
       )}
     </li>

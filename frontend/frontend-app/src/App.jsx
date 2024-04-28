@@ -63,10 +63,18 @@ const App = () => {
     }
   }, []);
 
-  const updateSandwichesList = (newSandwich) => {
-    setSandwiches((prevSandwiches) => {
-      return [...prevSandwiches, newSandwich];
-    });
+  const updateSandwichesList = (newSandwich, isDelete = false) => {
+    if (isDelete) {
+      setSandwiches((prevSandwiches) => {
+        return prevSandwiches.filter(
+          (sandwich) => sandwich._id !== newSandwich._id
+        );
+      });
+    } else {
+      setSandwiches((prevSandwiches) => {
+        return [...prevSandwiches, newSandwich];
+      });
+    }
   };
 
   const updateOrdersList = (newOrder) => {
@@ -214,7 +222,10 @@ const App = () => {
 
       {isLoggedIn && loggedUserType === ADMIN_USER && (
         <div>
-          <ListSandwiches sandwiches={sandwiches} />
+          <ListSandwiches
+            sandwiches={sandwiches}
+            onDelete={updateSandwichesList}
+          />
           <AddSandwich onAddSandwich={updateSandwichesList} />
           <h2>All Orders</h2>
           <ListOrders orders={orders} />
