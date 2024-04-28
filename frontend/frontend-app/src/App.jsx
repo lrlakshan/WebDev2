@@ -63,6 +63,18 @@ const App = () => {
     }
   }, []);
 
+  const updateSandwichesList = (newSandwich) => {
+    setSandwiches((prevSandwiches) => {
+      return [...prevSandwiches, newSandwich];
+    });
+  };
+
+  const updateOrdersList = (newOrder) => {
+    setOrders((prevOrders) => {
+      return [...prevOrders, newOrder];
+    });
+  };
+
   const fetchAllSandwiches = async () => {
     try {
       const response = await fetch(URL + "/sandwich", {
@@ -200,7 +212,7 @@ const App = () => {
       {isLoggedIn && loggedUserType === ADMIN_USER && (
         <div>
           <ListSandwiches sandwiches={sandwiches} />
-          <AddSandwich />
+          <AddSandwich onAddSandwich={updateSandwichesList} />
           <h2>All Orders</h2>
           <ListOrders orders={orders} />
         </div>
@@ -208,7 +220,7 @@ const App = () => {
 
       {isLoggedIn && loggedUserType === CUSTOMER_USER && (
         <div>
-          <ListSandwiches sandwiches={sandwiches} />
+          <ListSandwiches sandwiches={sandwiches} onOrder={updateOrdersList} />
           <h2>My Orders</h2>
           <ListOrders orders={orders} />
         </div>
